@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Андрей Кайманов](https://up.htmlacademy.ru/ecmascript/21/user/2309959).
-* Наставник: `Неизвестно`.
+* Наставник [Александр Конотоп](https://htmlacademy.ru/profile/sineway).
 
 ---
 
