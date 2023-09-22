@@ -3,7 +3,7 @@ import {html} from '../utilities.js';
 
 /**
  * @typedef {{
- *  value: SortType
+ *  value: FilterType
  *  isSelected: boolean
  *  isDisabled: boolean
  * }} ItemState
@@ -14,11 +14,11 @@ import {html} from '../utilities.js';
  *
  * @extends {View<State>}
  */
-class SortView extends View {
+class FilterView extends View {
   constructor() {
     super();
 
-    this.classList.add('trip-sort');
+    this.classList.add('trip-filters');
   }
 
   /**
@@ -27,18 +27,18 @@ class SortView extends View {
   createHtml() {
     return html`
       ${this.state.items.map((item) => html`
-        <div class="trip-sort__item  trip-sort__item--${item.value}">
+        <div class="trip-filters__filter">
           <input
-            id="sort-${item.value}"
-            class="trip-sort__input  visually-hidden"
+            id="filter-${item.value}"
+            class="trip-filters__filter-input  visually-hidden"
             type="radio"
-            name="trip-sort"
+            name="trip-filter"
             value="${item.value}"
             ${item.isSelected ? 'checked' : ''}
             ${item.isDisabled ? 'disabled' : ''}>
           <label
-            class="trip-sort__btn"
-            for="sort-${item.value}">
+            class="trip-filters__filter-label"
+            for="filter-${item.value}">
             ${item.value}
           </label>
         </div>
@@ -47,6 +47,6 @@ class SortView extends View {
   }
 }
 
-customElements.define('sort-view', SortView);
+customElements.define('filter-view', FilterView);
 
-export default SortView;
+export default FilterView;
