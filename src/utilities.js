@@ -2,6 +2,7 @@ import 'flatpickr/dist/flatpickr.css';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 import durationPlugin from 'dayjs/plugin/duration.js';
+import {escape} from 'he';
 
 dayjs.extend(durationPlugin);
 
@@ -36,11 +37,31 @@ function createCalendars(inputFrom, inputTo) {
 }
 
 /**
- * @param {dayjs.ConfigType} value
+ * @param {dayjs.ConfigType} valueFrom
+ * @param {dayjs.ConfigType} valueTo
  * @returns {string}
  */
-function formatDate(value) {
-  return dayjs(value).format('MMM D');
+function formatDateRange(valueFrom, valueTo) {
+  valueFrom = dayjs(valueFrom);
+  valueTo = dayjs(valueTo);
+
+  if (valueFrom.isSame(valueTo, 'day')) {
+    return formatDate(valueFrom);
+  }
+
+  return [
+    formatDate(valueFrom, valueFrom.isSame(valueTo, 'month')),
+    formatDate(valueTo)
+  ].join(' — ');
+}
+
+/**
+ * @param {dayjs.ConfigType} value
+ * @param {boolean} [isNarrow]
+ * @returns {string}
+ */
+function formatDate(value, isNarrow) {
+  return dayjs(value).format(isNarrow ? 'D' : 'D MMM');
 }
 
 /**
@@ -80,6 +101,20 @@ function formatNumber(value) {
 }
 
 /**
+ * @param {Array<string>} items
+ * @returns {string}
+ */
+function formatList(items) {
+  items = structuredClone(items);
+
+  if (items.length > 3) {
+    items.splice(1, items.length - 2, '...');
+  }
+
+  return items.join(' — ');
+}
+
+/**
  * @param {TemplateStringsArray} strings
  * @param {...any} values
  * @returns {string}
@@ -100,11 +135,38 @@ function html(strings, ...values) {
   });
 }
 
+/**
+ * @param {any} data
+ * @returns {any}
+ */
+function sanitize(data) {
+  switch (data?.constructor) {
+    case String:
+      return escape(data);
+
+    case Array:
+      return data.map(sanitize);
+
+    case Object:
+      return Object.keys(data).reduce((copy, key) => {
+        copy[key] = sanitize(data[key]);
+
+        return copy;
+      }, {});
+
+    default:
+      return data;
+  }
+}
+
 export {
   createCalendars,
+  formatDateRange,
   formatDate,
   formatTime,
   formatDuration,
   formatNumber,
-  html
+  formatList,
+  html,
+  sanitize
 };
