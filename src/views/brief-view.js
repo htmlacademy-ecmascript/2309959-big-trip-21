@@ -46,4 +46,4 @@ customElements.define('brief-view', BriefView);
 
 export default BriefView;
 
-// console.log(BriefView)
+
