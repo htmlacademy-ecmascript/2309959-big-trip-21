@@ -48,3 +48,4 @@ class Navigation extends EventTarget {
 }
 
 export default new Navigation();
+//Это паттерн одиночка, Этот класс должен быть в единственном экземпляре так же как и Window, Document или Math
